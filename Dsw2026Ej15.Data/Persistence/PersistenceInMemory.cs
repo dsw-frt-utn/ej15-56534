@@ -20,9 +20,12 @@ public class PersistenceInMemory : IPersistence
     private void LoadSpecialities()
     {
         var json = File.ReadAllText("specialities.json");
-        _specialities = JsonSerializer.Deserialize<List<Speciality>>(json);
+        var options = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true 
+        };
+        _specialities = JsonSerializer.Deserialize<List<Speciality>>(json, options);
     }
-
     public List<Doctor> GetDoctors() => _doctors;
 
     public Doctor GetDoctorById(Guid id)
