@@ -1,4 +1,4 @@
-﻿using Dsw2026Ej15.Api.Exceptions;
+﻿using Dsw2026Ej15.Domain.Exceptions;
 namespace Dsw2026Ej15.Api.Middlewares;
 
 public class ExceptionMiddleware
@@ -17,6 +17,12 @@ public class ExceptionMiddleware
         catch (ValidationException ex)
         {
             context.Response.StatusCode = 400;
+            context.Response.ContentType = "application/json";
+            await context.Response.WriteAsJsonAsync(new { error = ex.Message });
+        }
+        catch (NotFoundException ex)
+        {
+            context.Response.StatusCode = 404;
             context.Response.ContentType = "application/json";
             await context.Response.WriteAsJsonAsync(new { error = ex.Message });
         }

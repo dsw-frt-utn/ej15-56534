@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Dsw2026Ej15.Api.DTOs;
-using Dsw2026Ej15.Api.Exceptions;
 using Dsw2026Ej15.Data.Interfaces;
+using Dsw2026Ej15.Domain.Exceptions;
 using Dsw2026Ej15.Domain.Entities;
 namespace Dsw2026Ej15.Api.Controllers;
 
@@ -16,7 +16,6 @@ public class DoctorsController : ControllerBase
         _persistence = persistence;
     }
 
-    // POST api/doctors
     [HttpPost]
     public IActionResult Create([FromBody] CreateDoctorRequest request)
     {
@@ -42,7 +41,6 @@ public class DoctorsController : ControllerBase
         return StatusCode(201);
     }
 
-    // GET api/doctors
     [HttpGet]
     public IActionResult GetAll()
     {
@@ -58,14 +56,13 @@ public class DoctorsController : ControllerBase
         return Ok(doctors);
     }
 
-    // GET api/doctors/{id}
     [HttpGet("{id}")]
     public IActionResult GetById(Guid id)
     {
         var doctor = _persistence.GetDoctorById(id);
 
         if (doctor is null || !doctor.IsActive)
-            return NotFound();
+            throw new NotFoundException("Médico no encontrado o no está activo");
 
         return Ok(new DoctorResponse
         {
@@ -75,14 +72,13 @@ public class DoctorsController : ControllerBase
         });
     }
 
-    // DELETE api/doctors/{id}
     [HttpDelete("{id}")]
     public IActionResult Delete(Guid id)
     {
         var doctor = _persistence.GetDoctorById(id);
 
         if (doctor is null || !doctor.IsActive)
-            return NotFound();
+            throw new NotFoundException("Médico no encontrado o no está activo");
 
         doctor.IsActive = false;
         return NoContent();
