@@ -3,6 +3,7 @@ using Dsw2026Ej15.Api.DTOs;
 using Dsw2026Ej15.Data.Interfaces;
 using Dsw2026Ej15.Domain.Exceptions;
 using Dsw2026Ej15.Domain.Entities;
+
 namespace Dsw2026Ej15.Api.Controllers;
 
 [ApiController]
@@ -80,7 +81,7 @@ public class DoctorsController : ControllerBase
         if (doctor is null || !doctor.IsActive)
             throw new NotFoundException("Médico no encontrado o no está activo");
 
-        doctor.IsActive = false;
+        _persistence.DeactivateDoctor(doctor); // ← CAMBIADO
         return NoContent();
     }
 }
