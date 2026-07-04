@@ -39,4 +39,10 @@ public class PersistenceInMemory : IPersistence
 
     public Speciality GetSpecialityById(Guid id)
         => _specialities.FirstOrDefault(s => s.Id == id);
+
+    public void DeactivateDoctor(Doctor doctor)
+    {
+        doctor.IsActive = false;
+    }
+
 }
